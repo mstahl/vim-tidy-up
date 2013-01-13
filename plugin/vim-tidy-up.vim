@@ -12,6 +12,7 @@ let g:loaded_tidy_up = "yessir"
 
 function! TidyUp() range
   let lines = getline(a:firstline, a:lastline)
+  let indent = indent(a:firstline)
 
   let table = []
   for line in lines
@@ -34,24 +35,20 @@ function! TidyUp() range
       let i += 1
     endfor
   endfor
-  echo table
-  echo column_widths
 
+  let i = a:firstline
   for row in table
-    echo(row[0] + '| ' + join(row[1:-1], ' | ') + ' |')
+    let columns = []
+    let j = 0
+    for col in row
+      call add(columns, printf("%-0" . column_widths[j] . "s", col))
+      let j += 1
+    endfor
+
+    call setline(i, printf("%-0" . indent . "s", " ") . "| " . join(columns, " | ") . " |")
+    let i += 1
   endfor
 
 endfunction
 
-command TidyUp :call TidyUp()
 vmap ,tt :call TidyUp()<CR>
-
-ruby <<EOF
-
-require File.join(File.dirname(__FILE__), '..', 'src', 'tidy_up.rb')
-
-def tidy_up(tbl)
-  TidyUp::Cucumber.tablify(tbl)
-end
-
-EOF
