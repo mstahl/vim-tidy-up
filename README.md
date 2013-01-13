@@ -8,7 +8,8 @@ here?
     |472848|  8| 372   |891| 4456|     9999|
 
 Well, consider this your lucky day, 'cause you can tidy that sumbitch up with a
-couple of swift keystrokes!
+couple of swift keystrokes! Select the lines in visual mode and type `,tt` to
+get:
 
     | this   | table | be  | messed | up   | yo   |
     | 472848 | 8     | 372 | 891    | 4456 | 9999 |
