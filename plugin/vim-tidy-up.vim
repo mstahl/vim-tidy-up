@@ -18,7 +18,32 @@ function! TidyUp() range
     call TidyUpHashrockets(a:firstline, a:lastline)
   elseif match(line, ":.*,\s*$") != -1
     call TidyUpHashKeys(a:firstline, a:lastline)
+  elseif match(line, "=") != -1
+    call TidyUpAssignments(a:firstline, a:lastline)
   endif
+endfunction
+
+function! TidyUpAssignments(start, end)
+  let lines = getline(a:start, a:end)
+  let indent = indent(a:start)
+
+  let max_lhs_length = 0
+  for line in lines
+    let [lhs, rhs] = split(line, "\\s*=\\s*")
+    if len(lhs) > max_lhs_length
+      let max_lhs_length = len(lhs)
+    endif
+  endfor
+
+  let line_no = a:start
+
+  for line in lines
+    let [lhs, rhs] = split(line, "\\s*=\\s*")
+    " echo "LHS" ( "'" . lhs . "'" )
+    " echo "RHS" ( "'" . rhs . "'" )
+    call setline(line_no, printf("%-0" . max_lhs_length . "s = %s", lhs, rhs))
+    let line_no += 1
+  endfor
 endfunction
 
 function! TidyUpHashKeys(start, end)
