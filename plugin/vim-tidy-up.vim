@@ -10,7 +10,28 @@ endif
 
 let g:loaded_tidy_up = "yessir"
 
-function! TidyUp() range
+function! TidyUpHashrockets() range
+  let lines = getline(a:firstline, a:lastline)
+  let indent = indent(a:firstline)
+
+  let max_lhs_length = 0
+  for line in lines
+    let [lhs, rhs] = split(line, "\s*=>\s*")
+    if len(lhs) > max_lhs_length
+      let max_lhs_length = len(lhs)
+    endif
+  endfor
+
+  let line_no = a:firstline
+
+  for line in lines
+    let [lhs, rhs] = split(line, "\s*=>\s*")
+    call setline(line_no, printf("%-0" . max_lhs_length . "s=>%s", lhs, rhs))
+    let line_no += 1
+  endfor
+endfunction
+
+function! TidyUpTable() range
   let lines = getline(a:firstline, a:lastline)
   let indent = indent(a:firstline)
 
@@ -51,4 +72,5 @@ function! TidyUp() range
 
 endfunction
 
-vmap ,tt :call TidyUp()<CR>
+vmap ,tt :call TidyUpTable()<CR>
+vmap ,th :call TidyUpHashrockets()<CR>

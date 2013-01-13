@@ -26,7 +26,8 @@ from looking derelict and desheveled.
       :another_key => "up in here"
     }
 
-That looks awful! Let's tidy that situation right up.
+That looks awful! Let's tidy that situation right up. Type `,th` to get those
+hashrockets firing off in unison.
 
     some_hash = {
       :some_key        => "These hashrockets are",
