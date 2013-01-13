@@ -35,4 +35,21 @@ hashrockets firing off in unison.
       :another_key     => "up in here"
     }
 
-Looks great. Thanks, Tidy Up!
+Looks great. Thanks, Tidy Up! But what about the newfangled Javascript-style hashes
+the kids are using these days? Not to worry. Tidy Up has you covered.
+
+    some_hash = {
+      some_key: "These hashrockets are",
+      some_longer_key: "all over the place",
+      another_key: "up in here"
+    }
+
+Select the middle part of the hash, hit `,tt` and voilà!
+
+    some_hash = {
+      some_key:        "These hashrockets are",
+      some_longer_key: "all over the place",
+      another_key:     "up in here"
+    }
+
+More tidying features to come.

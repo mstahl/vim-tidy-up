@@ -16,7 +16,29 @@ function! TidyUp() range
     call TidyUpTable(a:firstline, a:lastline)
   elseif match(line, "=>") != -1
     call TidyUpHashrockets(a:firstline, a:lastline)
+  elseif match(line, ":.*,\s*$") != -1
+    call TidyUpHashKeys(a:firstline, a:lastline)
   endif
+endfunction
+
+function! TidyUpHashKeys(start, end)
+  let lines = getline(a:start, a:end)
+  let indent = indent(a:start)
+
+  let max_lhs_length = 0
+  for line in lines
+    let [lhs, rhs] = split(line, "\s*:\s*")
+    if len(lhs) > max_lhs_length
+      let max_lhs_length = len(lhs)
+    endif
+  endfor
+
+  let line_no = a:start
+  for line in lines
+    let [lhs, rhs] = split(line, "\s*:\s*")
+    call setline(line_no, printf("%-0" . (max_lhs_length + 1) . "s%s", lhs . ':', rhs))
+    let line_no += 1
+  endfor
 endfunction
 
 function! TidyUpHashrockets(start, end)
@@ -31,7 +53,7 @@ function! TidyUpHashrockets(start, end)
     endif
   endfor
 
-  let line_no = a:firstline
+  let line_no = a:start
 
   for line in lines
     let [lhs, rhs] = split(line, "\s*=>\s*")
