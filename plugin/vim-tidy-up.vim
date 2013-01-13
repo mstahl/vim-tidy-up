@@ -39,8 +39,6 @@ function! TidyUpAssignments(start, end)
 
   for line in lines
     let [lhs, rhs] = split(line, "\\s*=\\s*")
-    " echo "LHS" ( "'" . lhs . "'" )
-    " echo "RHS" ( "'" . rhs . "'" )
     call setline(line_no, printf("%-0" . max_lhs_length . "s = %s", lhs, rhs))
     let line_no += 1
   endfor
