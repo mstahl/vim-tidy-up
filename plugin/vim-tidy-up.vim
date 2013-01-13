@@ -71,11 +71,11 @@ function! TidyUpTable(start, end)
     let columns = []
     let j = 0
     for col in row
-      call add(columns, printf("%-0" . column_widths[j] . "s", col))
+      call add(columns, printf("%-" . column_widths[j] . "s", col))
       let j += 1
     endfor
 
-    call setline(i, printf("%-0" . indent . "s", " ") . "| " . join(columns, " | ") . " |")
+    call setline(i, printf("%" . indent . "s", "") . "| " . join(columns, " | ") . " |")
     let i += 1
   endfor
 
