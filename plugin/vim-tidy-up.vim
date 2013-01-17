@@ -21,14 +21,23 @@ function! TidyUp() range
   elseif match(line, "=") != -1
     call TidyUpAssignments(a:firstline, a:lastline)
   endif
+
+  call TidyUpComments(a:firstline, a:lastline)
 endfunction
 
 function! TidyUpAssignments(start, end)
   let lines = getline(a:start, a:end)
   let indent = indent(a:start)
+  if match(lines[0], '=') == -1
+    return
+  endif
 
   let max_lhs_length = 0
   for line in lines
+    if match(line, "=") == -1
+      echo line
+      cont
+    end
     let [lhs, rhs] = split(line, "\\s*=\\s*")
     if len(lhs) > max_lhs_length
       let max_lhs_length = len(lhs)
@@ -40,6 +49,27 @@ function! TidyUpAssignments(start, end)
   for line in lines
     let [lhs, rhs] = split(line, "\\s*=\\s*")
     call setline(line_no, printf("%-0" . max_lhs_length . "s = %s", lhs, rhs))
+    let line_no += 1
+  endfor
+endfunction
+
+function! TidyUpComments(start, end)
+  let lines = getline(a:start, a:end)
+  if match(lines[0], '#') == -1
+    return
+  endif
+  let max_lhs_length = 0
+  for line in lines
+    let [lhs, rhs] = split(line, "\\s*#\\s*")
+    if len(lhs) > max_lhs_length
+      let max_lhs_length = len(lhs)
+    endif
+  endfor
+
+  let line_no = a:start
+  for line in lines
+    let [lhs, rhs] = split(line, "\\s*#\\s*")
+    call setline(line_no, printf("%-0" . max_lhs_length . "s # %s", lhs, rhs))
     let line_no += 1
   endfor
 endfunction
